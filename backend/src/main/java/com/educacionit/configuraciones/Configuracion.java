@@ -8,7 +8,7 @@ import jakarta.ws.rs.ApplicationPath;
 public class Configuracion extends ResourceConfig {
 
 	public Configuracion() {
-		packages("com.borealit");
+		packages("com.educacionit");
 	}
 
 }

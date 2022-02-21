@@ -30,7 +30,7 @@ public class UsuarioImplementacion implements DAO<Usuario, Long> {
 	@Override
 	public Usuario buscarPorID(Long id) {
 		Usuario usuario = null;
-		String sql = "select nombre, apellido, tipoDocumento, numeroDocumento, correo, AES_ENCRYPT(clave, ?) as clave, fechaNacimiento, fechaActualizacion from usuarios where id = ?;";
+		String sql = "select nombre, apellido, tipoDocumento, numeroDocumento, correo, AES_DECRYPT(clave, ?) as clave, fechaNacimiento, fechaActualizacion from usuarios where id = ?;";
 
 		try {
 			if (null == psBuscar) {
@@ -50,6 +50,7 @@ public class UsuarioImplementacion implements DAO<Usuario, Long> {
 				usuario.setDocumento(
 						new Documento(resultado.getString("tipoDocumento"), resultado.getString("numeroDocumento")));
 				usuario.setCorreo(resultado.getString("correo"));
+				usuario.setClave(resultado.getString("clave"));
 				usuario.setFechaNacimiento(Fechas.getLocalDate(resultado.getString("fechaNacimiento")));
 				usuario.setFechaActualizacion(Fechas.getLocalDateTime(resultado.getString("fechaActualizacion")));
 				usuario.setDirecciones(direccionImplementacion.listar(id));
@@ -113,7 +114,7 @@ public class UsuarioImplementacion implements DAO<Usuario, Long> {
 	public List<Usuario> listar(Long id) {
 		List<Usuario> usuarios = new ArrayList<>();
 
-		String sql = "select id, nombre, apellido, tipoDocumento, numeroDocumento, correo, AES_ENCRYPT(clave, ?) as clave, fechaNacimiento, fechaActualizacion from usuarios";
+		String sql = "select id, nombre, apellido, tipoDocumento, numeroDocumento, correo, AES_DECRYPT(clave, ?) as clave, fechaNacimiento, fechaActualizacion from usuarios";
 
 		try {
 			if (null == psBuscar) {
@@ -132,6 +133,7 @@ public class UsuarioImplementacion implements DAO<Usuario, Long> {
 				usuario.setDocumento(
 						new Documento(resultado.getString("tipoDocumento"), resultado.getString("numeroDocumento")));
 				usuario.setCorreo(resultado.getString("correo"));
+				usuario.setClave(resultado.getString("clave"));
 				usuario.setFechaNacimiento(Fechas.getLocalDate(resultado.getString("fechaNacimiento")));
 				usuario.setFechaActualizacion(Fechas.getLocalDateTime(resultado.getString("fechaActualizacion")));
 				usuario.setDirecciones(direccionImplementacion.listar(resultado.getLong("id")));

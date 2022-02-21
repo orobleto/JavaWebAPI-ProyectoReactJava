@@ -1,6 +1,5 @@
 package com.educacionit.implementaciones;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -28,7 +27,8 @@ public class ConexionMariaDB {
 		// instanciamos el objeto
 		Properties propiedades = new Properties();
 		try {
-			InputStream archivoPropiedades = Thread.currentThread().getContextClassLoader().getResourceAsStream("database.properties");
+			InputStream archivoPropiedades = Thread.currentThread().getContextClassLoader()
+					.getResourceAsStream("database.properties");
 			// cargamos el archivo utilizando la ruta relativa donde esta el proyecto
 			// propiedades.load(new FileInputStream("resources/database.properties"));
 			propiedades.load(archivoPropiedades);
