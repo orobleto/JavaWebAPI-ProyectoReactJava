@@ -1,6 +1,8 @@
 package com.educacionit.entidades;
 
 public final class Direccion {
+	private Long id;
+	private Long idUsuario;
 	private String ciudad;
 	private String calle;
 	private Integer numero;
@@ -8,7 +10,7 @@ public final class Direccion {
 	private Ubicacion ubicacion;
 
 	public Direccion() {
-
+		super();
 	}
 
 	public Direccion(String ciudad, String calle, Integer numero, String codigoPostal, Ubicacion ubicacion) {
@@ -22,8 +24,24 @@ public final class Direccion {
 
 	@Override
 	public String toString() {
-		return "Direccion [ciudad=" + ciudad + ", calle=" + calle + ", numero=" + numero + ", codigoPostal="
-				+ codigoPostal + ", ubicacion=" + ubicacion + "]";
+		return "Direccion [id=" + id + ", idUsuario=" + idUsuario + ", ciudad=" + ciudad + ", calle=" + calle
+				+ ", numero=" + numero + ", codigoPostal=" + codigoPostal + ", ubicacion=" + ubicacion + "]";
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Long getIdUsuario() {
+		return idUsuario;
+	}
+
+	public void setIdUsuario(Long idUsuario) {
+		this.idUsuario = idUsuario;
 	}
 
 	public String getCiudad() {

@@ -3,41 +3,37 @@ package com.educacionit.entidades;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 
 public class Usuario {
-	private Integer id;
+	private Long id;
 	private String nombre;
 	private String apellido;
+	private Documento documento;
 	private String correo;
 	private String clave;
+	
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate fechaNacimiento;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime fechaActualizacion;
-
 	private List<Direccion> direcciones;
-	private static AtomicInteger contador = new AtomicInteger(1);
 
 	public Usuario() {
 		super();
-		this.id = contador.getAndIncrement();
 	}
 
-	/**
-	 * @param id
-	 * @param nombre
-	 * @param apellido
-	 * @param correo
-	 * @param clave
-	 * @param fechaNacimiento
-	 * @param fechaActualizacion
-	 * @param direcciones
-	 */
-	public Usuario(Integer id, String nombre, String apellido, String correo, String clave, LocalDate fechaNacimiento,
-			LocalDateTime fechaActualizacion, List<Direccion> direcciones) {
+	public Usuario(Long id, String nombre, String apellido, Documento documento, String correo, String clave,
+			LocalDate fechaNacimiento, LocalDateTime fechaActualizacion, List<Direccion> direcciones) {
 		super();
-		this.id = null == id ? contador.getAndIncrement() : id;
+		this.id = id;
 		this.nombre = nombre;
 		this.apellido = apellido;
+		this.documento = documento;
 		this.correo = correo;
 		this.clave = clave;
 		this.fechaNacimiento = fechaNacimiento;
@@ -47,16 +43,16 @@ public class Usuario {
 
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", correo=" + correo + ", clave="
-				+ clave + ", fechaNacimiento=" + fechaNacimiento + ", fechaActualizacion=" + fechaActualizacion
-				+ ", direcciones=" + direcciones + "]";
+		return "Usuario [id=" + id + ", nombre=" + nombre + ", apellido=" + apellido + ", documento=" + documento
+				+ ", correo=" + correo + ", clave=" + clave + ", fechaNacimiento=" + fechaNacimiento
+				+ ", fechaActualizacion=" + fechaActualizacion + ", direcciones=" + direcciones + "]";
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -74,6 +70,14 @@ public class Usuario {
 
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
+	}
+
+	public Documento getDocumento() {
+		return documento;
+	}
+
+	public void setDocumento(Documento documento) {
+		this.documento = documento;
 	}
 
 	public String getCorreo() {
