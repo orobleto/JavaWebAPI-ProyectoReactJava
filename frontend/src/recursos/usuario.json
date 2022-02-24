@@ -1,0 +1,27 @@
+{
+    "id": 4,
+    "nombre": "Mariana",
+    "apellido": "Bracho",
+    "documento": {
+        "tipo": "DNI",
+        "numero": "05"
+    },
+    "correo": "mariana05.bracho@gmail.com",
+    "clave": "9876",
+    "fechaNacimiento": "1989-06-06",
+    "fechaActualizacion": "2021-02-01 05:03:02",
+    "direcciones": [
+        {
+            "id": 3,
+            "idUsuario": 4,
+            "ciudad": "CABA",
+            "calle": "Colegiales",
+            "numero": 2,
+            "codigoPostal": "25",
+            "ubicacion": {
+                "latitud": -58.448299845460035,
+                "longitud": -34.57224675747592
+            }
+        }
+    ]
+}

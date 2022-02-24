@@ -7,15 +7,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.educacionit.utilidades.EsquemaBase64;
 
 public class ConexionMariaDB {
 	private String KEY;
 	private Connection conexion;
-	private static Logger log = LogManager.getLogger(ConexionMariaDB.class);
+	
 
 	public Connection getConexion() {
 

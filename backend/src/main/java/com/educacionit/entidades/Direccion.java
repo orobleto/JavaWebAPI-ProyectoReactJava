@@ -13,8 +13,9 @@ public final class Direccion {
 		super();
 	}
 
-	public Direccion(String ciudad, String calle, Integer numero, String codigoPostal, Ubicacion ubicacion) {
+	public Direccion(Long id, String ciudad, String calle, Integer numero, String codigoPostal, Ubicacion ubicacion) {
 		super();
+		this.id = id;
 		this.ciudad = ciudad;
 		this.calle = calle;
 		this.numero = numero;

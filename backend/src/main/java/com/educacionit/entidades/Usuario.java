@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.educacionit.utilidades.Fechas;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -15,11 +16,10 @@ public class Usuario {
 	private Documento documento;
 	private String correo;
 	private String clave;
-	
 	@JsonDeserialize(using = LocalDateDeserializer.class)
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Fechas.PATRON_FECHA_YYYYMMDD)
 	private LocalDate fechaNacimiento;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Fechas.PATRON_FECHA_HORA_YYYYMMDD_HHMMSS)
 	private LocalDateTime fechaActualizacion;
 	private List<Direccion> direcciones;
 

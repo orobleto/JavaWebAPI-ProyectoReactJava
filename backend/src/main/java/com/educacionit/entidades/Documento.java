@@ -1,6 +1,6 @@
 package com.educacionit.entidades;
 
-public class Documento {
+public final class Documento {
 	private String tipo;
 	private String numero;
 

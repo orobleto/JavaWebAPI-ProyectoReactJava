@@ -8,16 +8,14 @@ import java.util.List;
 
 import com.educacionit.entidades.Direccion;
 import com.educacionit.entidades.Ubicacion;
-import com.educacionit.entidades.Usuario;
 import com.educacionit.implementaciones.ConexionMariaDB;
 import com.educacionit.interfaces.DAO;
-import com.educacionit.utilidades.Fechas;
 
 public class DireccionImplementacion implements DAO<Direccion, Long> {
 	private PreparedStatement psInsertar;
 	private PreparedStatement psBuscar;
 	private PreparedStatement psActualizar;
-	private PreparedStatement pseliminar;
+	private PreparedStatement psEliminar;
 	private ConexionMariaDB conexionMariaDB;
 
 	@Override
@@ -53,72 +51,128 @@ public class DireccionImplementacion implements DAO<Direccion, Long> {
 	}
 
 	@Override
-	public boolean insertar(Direccion direccion) {
+	public boolean insertar(Direccion direccion) throws SQLException {
 		boolean inserto = false;
-		String sql = "insert into direcciones (id_usuario, ciudad, calle, numero, codigoPostal, longitud, latitud) values(?, ?, ?, ?, ?, ?, ?);";
-		try {
-			if (null == psInsertar) {
-				psInsertar = conexionMariaDB.getConexion().prepareStatement(sql);
-			}
+		String sql = "insert into direcciones (id_usuario, ciudad, calle, numero, codigoPostal, longitud, latitud) values (?, ?, ?, ?, ?, ?, ?);";
 
-			psInsertar.setLong(1, direccion.getIdUsuario());
-			psInsertar.setString(2, direccion.getCiudad());
-			psInsertar.setString(3, direccion.getCalle());
-			psInsertar.setInt(4, direccion.getNumero());
-			psInsertar.setString(5, direccion.getCodigoPostal());
-			psInsertar.setDouble(6, direccion.getUbicacion().getLongitud());
-			psInsertar.setDouble(7, direccion.getUbicacion().getLatitud());
+		if (null == psInsertar) {
+			// el segundo parametro indica qupodemos recuperar el
+			// ID autoincrementable generado por MariaDB
+			psInsertar = conexionMariaDB.getConexion().prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+		}
 
-			inserto = psInsertar.executeUpdate() == 1;
+		psInsertar.setLong(1, direccion.getIdUsuario());
+		psInsertar.setString(2, direccion.getCiudad());
+		psInsertar.setString(3, direccion.getCalle());
+		psInsertar.setInt(4, direccion.getNumero());
+		psInsertar.setString(5, direccion.getCodigoPostal());
+		psInsertar.setDouble(6, direccion.getUbicacion().getLongitud());
+		psInsertar.setDouble(7, direccion.getUbicacion().getLatitud());
 
-		} catch (SQLException e) {
-			e.printStackTrace();
+		inserto = psInsertar.executeUpdate() == 1;
+
+		// recuperamos el ID autoincrementable
+		ResultSet auto_incremental = psInsertar.getGeneratedKeys();
+
+		if (auto_incremental.next()) {
+			direccion.setId(auto_incremental.getLong(1));
 		}
 
 		return inserto;
 	}
 
 	@Override
-	public boolean eliminar(Direccion direccion) {
+	public boolean eliminar(Direccion direccion) throws SQLException {
+		String sql = "delete from direcciones where id = ? ";
 
-		return false;
+		if (null == psEliminar) {
+			psEliminar = conexionMariaDB.getConexion().prepareStatement(sql);
+		}
+		psEliminar.setLong(1, direccion.getId());
+
+		return psEliminar.executeUpdate() == 1;
+	}
+	
+	public boolean eliminarPorUsuario(long id) throws SQLException {
+		String sql = "delete from direcciones where id_usuario = ? ";
+
+		if (null == psEliminar) {
+			psEliminar = conexionMariaDB.getConexion().prepareStatement(sql);
+		}
+		psEliminar.setLong(1, id);
+
+		return psEliminar.executeUpdate() == 1;
 	}
 
 	@Override
-	public boolean actualizar(Direccion direccion) {
+	public boolean actualizar(Direccion direccion) throws SQLException {
+		String sql = "update direcciones set ciudad = ?, calle = ?, numero = ?, codigoPostal = ?, longitud = ?, latitud = ? where id = ? ";
 
-		return false;
+		if (null == psActualizar) {
+			psActualizar = conexionMariaDB.getConexion().prepareStatement(sql);
+		}
+
+		psActualizar.setString(1, direccion.getCiudad());
+		psActualizar.setString(2, direccion.getCalle());
+		psActualizar.setInt(3, direccion.getNumero());
+		psActualizar.setString(4, direccion.getCodigoPostal());
+		psActualizar.setDouble(5, direccion.getUbicacion().getLongitud());
+		psActualizar.setDouble(6, direccion.getUbicacion().getLatitud());
+		psActualizar.setLong(7, direccion.getId());
+
+		return psActualizar.executeUpdate() == 1;
 	}
 
 	@Override
-	public List<Direccion> listar(Long idUsuario) {
+	public List<Direccion> listar() throws SQLException {
+		List<Direccion> direcciones = new ArrayList<>();
+
+		String sql = "select id, id_usuario, ciudad, calle, numero, codigoPostal, longitud, latitud from direcciones where id_usuario;";
+
+		if (null == psBuscar) {
+			psBuscar = conexionMariaDB.getConexion().prepareStatement(sql);
+		}
+
+		ResultSet resultado = psBuscar.executeQuery();
+
+		while (resultado.next()) {
+			Direccion direccion = new Direccion();
+			direccion.setId(resultado.getLong("id"));
+			direccion.setIdUsuario(resultado.getLong("id_usuario"));
+			direccion.setCiudad(resultado.getString("ciudad"));
+			direccion.setCalle(resultado.getString("calle"));
+			direccion.setNumero(resultado.getInt("numero"));
+			direccion.setCodigoPostal(resultado.getString("codigoPostal"));
+			direccion.setUbicacion(new Ubicacion(resultado.getDouble("longitud"), resultado.getDouble("latitud")));
+			direcciones.add(direccion);
+		}
+
+		return direcciones;
+	}
+
+	public List<Direccion> listarPorUsuario(long idUsuario) throws SQLException {
 		List<Direccion> direcciones = new ArrayList<>();
 
 		String sql = "select id, id_usuario, ciudad, calle, numero, codigoPostal, longitud, latitud from direcciones where id_usuario = ?;";
 
-		try {
-			if (null == psBuscar) {
-				psBuscar = conexionMariaDB.getConexion().prepareStatement(sql);
-			}
+		if (null == psBuscar) {
+			psBuscar = conexionMariaDB.getConexion().prepareStatement(sql);
+		}
 
-			psBuscar.setLong(1, idUsuario);
+		psBuscar.setLong(1, idUsuario);
 
-			ResultSet resultado = psBuscar.executeQuery();
+		ResultSet resultado = psBuscar.executeQuery();
 
-			while (resultado.next()) {
-				Direccion direccion = new Direccion();
-				direccion.setId(resultado.getLong("id"));
-				direccion.setIdUsuario(idUsuario);
-				direccion.setCiudad(resultado.getString("ciudad"));
-				direccion.setCalle(resultado.getString("calle"));
-				direccion.setNumero(resultado.getInt("numero"));
-				direccion.setCodigoPostal(resultado.getString("codigoPostal"));
-				direccion.setUbicacion(new Ubicacion(resultado.getDouble("longitud"), resultado.getDouble("latitud")));
-				direcciones.add(direccion);
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
+		while (resultado.next()) {
+			Direccion direccion = new Direccion();
+			direccion.setId(resultado.getLong("id"));
+			direccion.setIdUsuario(idUsuario);
+			direccion.setCiudad(resultado.getString("ciudad"));
+			direccion.setCalle(resultado.getString("calle"));
+			direccion.setNumero(resultado.getInt("numero"));
+			direccion.setCodigoPostal(resultado.getString("codigoPostal"));
+			direccion.setUbicacion(new Ubicacion(resultado.getDouble("longitud"), resultado.getDouble("latitud")));
+			direcciones.add(direccion);
 		}
 
 		return direcciones;
