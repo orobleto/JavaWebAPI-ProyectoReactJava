@@ -75,15 +75,16 @@ public class UsuarioServicio {
 			respuesta.setEstado("OK");
 			respuesta.setCodigoEstado(codigoEstado);
 			respuesta.setMensaje(operacion.getMensaje());
+			respuesta.setDatos(Arrays.asList(usuarioImplementacion.buscarPorID(usuario.getId())));
 			log.info(respuesta);
 
 		} catch (SQLException e) {
 			respuesta.setEstado("ERROR");
-			respuesta.setCodigoEstado(400);
+			codigoEstado = 400;
+			respuesta.setCodigoEstado(codigoEstado);
 			respuesta.setMensaje(e.getMessage());
 			log.error(respuesta);
 		}
-		respuesta.setDatos(Arrays.asList(usuarioImplementacion.buscarPorID(usuario.getId())));
 		return Response.status(codigoEstado).entity(respuesta).build();
 	}
 
