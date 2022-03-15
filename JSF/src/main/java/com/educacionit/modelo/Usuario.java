@@ -1,18 +1,14 @@
 package com.educacionit.modelo;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
+import java.io.Serializable;
+import java.util.Date;
 
-//POJO
-// lombok maven
+public class Usuario implements Serializable {
 
-
-@ManagedBean
-@SessionScoped
-public class Usuario {
+	private static final long serialVersionUID = 1L;
 	private String correo;
 	private String clave;
+	private Date fechaCreacion = new Date();
 
 	public Usuario() {
 
@@ -43,6 +39,14 @@ public class Usuario {
 
 	public void setClave(String clave) {
 		this.clave = clave;
+	}
+
+	public Date getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Date fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
 	}
 
 }

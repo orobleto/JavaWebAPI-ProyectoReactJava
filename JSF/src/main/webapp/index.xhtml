@@ -1,24 +1,40 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html">
 
-<h:body>
+<ui:composition template="/templates/template.xhtml">
 
-	<h:form>
-		<h:outputLabel value="Correo" for="correo" />
-		<h:inputText value="#{usuario.correo}" id="correo" placeholder="usuario@dominio.ext" />	
-		
-		<h:outputLabel value="Clave" for="clave" />
-		<h:inputSecret value="#{usuario.clave}" id="clave" placeholder="clave" />
-	
-		<h:commandButton action="usuarios" value="Enviar" />
-	
+
+
+	<ui:define name="titulo"> 
+	Usuarios
+	</ui:define>
+	<ui:define name="cuerpo">
+
+		<h:form>
+			<h:panelGrid columns="2">
+				<h:outputLabel value="Correo" for="correo" />
+				<h:inputText value="#{usuarioBean.usuario.correo}" required="true">
+					<f:validator validatorId="validarCorreoelectronico" />
+				</h:inputText>
+
+				<h:outputLabel value="Clave" for="clave" />
+				<h:inputSecret value="#{usuarioBean.usuario.clave}" />
+				<h:message for="clave" />
+			</h:panelGrid>
+			<h:commandButton action="#{usuarioBean.agregarUsuario()}"
+				value="Agregar" />
 		</h:form>
 
 
-</h:body>
+	</ui:define>
+
+	<ui:define name="mensajes">
+		<h:messages></h:messages>
+	</ui:define>
+
+
+</ui:composition>
 </html>

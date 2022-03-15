@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html" lang="es">
+<head>
+<meta charset='utf-8' />
+<meta http-equiv='X-UA-Compatible' content='IE=edge' />
+<title>Page Title</title>
+<meta name='viewport' content='width=device-width, initial-scale=1' />
+<link rel='stylesheet' type='text/css' media='screen'
+	href="../css/estilo.css" />
+</head>
+<body>
+	<div class="header">
+		<h1>JAVA WEB API</h1>
+		<p>Proyecto Java Server Faces</p>
+	</div>
+
+	<div class="topnav">
+		<ui:include src="/templates/menu.xhtml" />
+	</div>
+
+	<div class="row">
+		<div class="centercolumn">
+			<div class="card">
+				<h2><ui:insert name="titulo"></ui:insert></h2>
+				<p><ui:insert name="cuerpo"></ui:insert></p>
+				<p class="messages"><ui:insert name="mensajes"></ui:insert> </p>
+			</div>
+		</div>
+	</div>
+	
+	
+
+	<div class="footer1">
+		<h3><ui:insert name="pie1"></ui:insert></h3>
+	</div>
+
+	<div class="footer2">
+		<p>Ing. Octavio Robleto. Copyright 2020-2025</p>
+	</div>
+</body>
+</html>
